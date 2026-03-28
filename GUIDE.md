@@ -1,41 +1,63 @@
-# AI Image Precise Editing & Mask-Based Inpainting Technology
+# Dataler.com AI Image Generation API Guide - Precise Editing & Mask-Based Inpainting
 
-AI image precise editing implementation based on [Dataler.com](https://dataler.com) API, using MASK-based inpainting technology for pixel-level accurate product replacement.
+## I. Platform Introduction
 
-[![PHP](https://img.shields.io/badge/PHP-8.0+-blue.svg)](https://php.net)
-[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+**Dataler.com** is a professional third-party AI API proxy platform offering the following core advantages:
 
-## Platform Recommendation
-
-**Dataler.com** - Professional Third-Party AI API Proxy Platform
-- Official price at 22% discount, significantly reducing AI image generation costs
-- Supports almost all mainstream AI image generation models
-- Dynamic load balancing for stable and efficient API responses
-- Compatible with Gemini API format for seamless project migration
+- **22% of official price**: Significantly reduces AI image generation costs
+- **Full model support**: Connects to almost all mainstream AI image generation models
+- **Dynamic load balancing**: Intelligent scheduling ensures stable and efficient API responses
+- **Gemini API compatible**: Seamless migration for existing projects
 
 API Endpoint: `https://dataler.com/v1beta/models/{model}:generateContent`
 
-## Core Features
+---
 
-### 1. AI Reverse Prompt Generation
-Automatically analyze images to generate detailed AI image generation prompts
+## II. Core Features
 
-### 2. Reference Image Product Replacement (Prompt Replacement Mode)
-- Analyze reference product features
-- Intelligently merge prompts
-- Generate new images
+### 2.1 AI Reverse Prompt Generation
 
-### 3. Original Product to Reference Product (Dual Image Fusion Mode)
-- Reverse engineer scene image (person, lighting, atmosphere)
-- Reverse engineer product image (appearance, material, color)
-- Intelligent integration and generation
+Automatically generates detailed AI image generation prompts by analyzing images, including:
+- Subject analysis (person/object/scene)
+- Composition and perspective
+- Color scheme
+- Lighting effects
+- Art style
+- Material texture
+- Background environment
+- Camera/lens effects
 
-### 4. Precise Editing - MASK-Based Inpainting Mode ⭐
-**This is the most precise image replacement technology**
+### 2.2 Reference Image Product Replacement (Prompt Replacement Mode)
 
-## Technical Principles & Workflow
+**Workflow Overview**:
+1. **Analyze reference product**: AI deeply analyzes product images, extracting appearance, material, color, and other features
+2. **Prompt integration**: Intelligently merge product description with user-provided scene prompt
+3. **Generate new image**: Use new prompt combined with reference image to generate final image
 
-### MASK-Based Inpainting Workflow
+**Application Scenarios**:
+- E-commerce product image replacement
+- Maintain scene atmosphere while changing products
+- Batch generate similar style product display images
+
+### 2.3 Original Product to Reference Product (Dual Image Fusion Mode)
+
+**Workflow Overview**:
+1. **Reverse engineer scene image**: Extract complete scene, person appearance, emotion, clothing, lighting, and other information
+2. **Reverse engineer product image**: Detailed analysis of product appearance, size, material, color, structural features
+3. **Intelligent integration**: Merge product description into scene description, keeping person and scene unchanged
+4. **Dual image reference generation**: Use new prompt + both original images as references to generate result
+
+**Core Advantages**:
+- 100% consistent person appearance
+- Completely preserved person emotional state
+- Unchanged scene lighting and atmosphere
+- Only replace product appearance
+
+### 2.4 Precise Editing - MASK-Based Inpainting Mode (button2 core logic)
+
+This is the most precise image replacement technology, suitable for product replacement scenarios requiring pixel-level control.
+
+#### Workflow
 
 ```
 ┌─────────────────┐     ┌─────────────────┐     ┌─────────────────┐
@@ -70,14 +92,14 @@ Automatically analyze images to generate detailed AI image generation prompts
 └─────────────────────────────────────────────────────────────┘
 ```
 
-### Detailed Steps
+#### Detailed Steps
 
-#### Step 1: Image Preparation
+**Step 1: Image Preparation**
 - Load scene image (reference) and new product image
 - Intelligent compression (max side 1500px, maintaining quality while reducing transmission)
 - Convert to Base64 format
 
-#### Step 2: AI Generates MASK
+**Step 2: AI Generates MASK**
 
 Two strategies based on whether user provides target description:
 
@@ -120,7 +142,7 @@ Rules:
 - Output ONLY the mask image, no text."
 ```
 
-#### Step 3: Reverse Engineer Product Appearance Features
+**Step 3: Reverse Engineer Product Appearance Features**
 
 AI analyzes new product image and extracts:
 - Overall shape and contour
@@ -131,7 +153,7 @@ AI analyzes new product image and extracts:
 - Structural features (buttons, ports, handles, hinges, stitching)
 - Product quantity and arrangement
 
-#### Step 4: Inpainting Precise Replacement
+**Step 4: Inpainting Precise Replacement**
 
 Construct request containing four parts:
 1. **Text Instructions**: Detailed replacement rules
@@ -167,27 +189,31 @@ Placement rules:
 - Preserve the exact resolution and aspect ratio of the original image"
 ```
 
-## Technical Key Points
+---
 
-### MASK Generation Key Points
+## III. Technical Key Points Summary
+
+### 3.1 MASK Generation Key Points
 - **Pure Black & White**: No gray or gradients allowed
 - **Smooth Edges**: 3-5 pixel transition margin
 - **No Shadows**: White area contains only the product itself
 - **Same Dimensions**: MASK must have exact same dimensions as original image
 
-### Product Fidelity Key Points
+### 3.2 Product Fidelity Key Points
 - **Shape Unchanged**: No stretching, compressing, or distortion
 - **Proportion Maintained**: Aspect ratio strictly preserved
 - **Material Restoration**: Color, texture, reflective properties 100% restored
 - **Structure Complete**: All visible components must be preserved
 
-### Scene Fusion Key Points
+### 3.3 Scene Fusion Key Points
 - **Perspective Matching**: Adjust product angle to match scene perspective
 - **Consistent Lighting**: Match scene light source direction and color temperature
 - **Natural Shadows**: Add shadows consistent with light source
 - **Edge Blending**: Seamlessly integrate with surrounding environment
 
-## Application Scenarios
+---
+
+## IV. Application Scenarios
 
 1. **E-commerce Product Replacement**: Model holding product images, quickly replace different styles
 2. **Scene Marketing Images**: Maintain beautiful scenes while changing displayed products
@@ -195,96 +221,9 @@ Placement rules:
 4. **Product Iteration Display**: Show different colors/configurations of product from same angle
 5. **Virtual Try-on/Trial**: Naturally integrate products into user scenes
 
-## Quick Start
+---
 
-### Requirements
-- PHP 8.0+
-- cURL Extension
-- GD Extension (for image processing)
-
-### Installation
-
-```bash
-git clone https://github.com/lmj243-code/ai-image-inpainting-php.git
-cd ai-image-inpainting-php
-```
-
-### Usage
-
-#### 1. Basic Usage (Auto-Detect Subject)
-
-```php
-require_once 'DatalerInpaintingAPI.php';
-
-$apiKey = 'your-api-key-here';
-$api = new DatalerInpaintingAPI($apiKey);
-
-$result = $api->replaceProductWithMask(
-    'scene.jpg',        // Scene image: model holding old product
-    'new_product.jpg',  // New product image: product to replace with
-    null,               // No target specified, auto-detect
-    'output.png',       // Output path
-    true                // Enable compression
-);
-```
-
-#### 2. Specify Replacement Target
-
-```php
-$result = $api->replaceProductWithMask(
-    'model_with_bag.jpg',   // Scene image: model holding red handbag
-    'blue_bag.jpg',         // New product image: blue handbag
-    'red handbag',          // Explicitly specify to replace the red handbag
-    'output_blue_bag.png',  // Output path
-    true
-);
-```
-
-#### 3. Command Line Examples
-
-```bash
-# Run Example 1: Auto-detect
-php DatalerInpaintingAPI.php 1
-
-# Run Example 2: Specify target
-php DatalerInpaintingAPI.php 2
-
-# Run Example 3: Step-by-step
-php DatalerInpaintingAPI.php 3
-
-# Run Example 4: Batch processing
-php DatalerInpaintingAPI.php 4
-
-# Run Example 5: Custom logging
-php DatalerInpaintingAPI.php 5
-```
-
-## API Reference
-
-### DatalerInpaintingAPI Class
-
-#### Constructor
-```php
-public function __construct(string $apiKey)
-```
-
-#### Main Methods
-
-| Method | Description |
-|--------|-------------|
-| `replaceProductWithMask()` | One-click complete mask replacement workflow |
-| `generateMask()` | AI generates MASK |
-| `analyzeProduct()` | Reverse engineer product appearance features |
-| `inpaint()` | Execute inpainting precise replacement |
-| `compressImage()` | Intelligent image compression |
-| `imageToBase64()` | Image to Base64 conversion |
-
-### Supported Models
-
-- `gemini-3-pro-image-preview`: Professional image generation model
-- `gemini-3.1-flash-image-preview`: Fast image generation model
-
-## Best Practices
+## V. Best Practices
 
 1. **Image Quality**: Use clear, evenly lit product images
 2. **Precise Description**: More detailed user target description leads to more accurate MASK positioning
@@ -292,32 +231,40 @@ public function __construct(string $apiKey)
 4. **Size Matching**: Scene and product images should have similar resolutions
 5. **Compression Strategy**: Appropriate compression of large images can improve API response speed
 
-## File Structure
+---
 
-| File | Description |
-|------|-------------|
-| `DatalerInpaintingAPI.php` | Core API class with complete implementation |
-| `GUIDE.md` | Detailed technical documentation and principles |
-| `README.md` | Project documentation |
+## VI. API Request Format
 
-## Author
+### Basic Request Structure
 
-- **LT** - Initial code and documentation
+```json
+{
+  "contents": [
+    {
+      "role": "user",
+      "parts": [
+        {"text": "Prompt content"},
+        {"inlineData": {"mimeType": "image/jpeg", "data": "base64 encoded image"}}
+      ]
+    }
+  ],
+  "generationConfig": {
+    "responseModalities": ["TEXT", "IMAGE"],
+    "temperature": 0.3,
+    "maxOutputTokens": 2048,
+    "imageConfig": {
+      "aspectRatio": "1:1",
+      "imageSize": "1K"
+    }
+  }
+}
+```
 
-## License
+### Supported Models
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
-
-## Acknowledgments
-
-- [Dataler.com](https://dataler.com) - Providing stable and efficient AI API services
-- Gemini - Powerful image generation model
-
-## Related Links
-
-- [Dataler.com Official](https://dataler.com)
-- [Gemini API Documentation](https://ai.google.dev/docs)
+- `gemini-3-pro-image-preview`: Professional image generation model
+- `gemini-3.1-flash-image-preview`: Fast image generation model
 
 ---
 
-**Note**: Using this code requires a Dataler.com API Key. Please visit the official website to obtain one.
+*This document is based on Dataler.com API and Gemini image generation technology*
